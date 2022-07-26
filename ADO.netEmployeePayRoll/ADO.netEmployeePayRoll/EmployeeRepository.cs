@@ -175,5 +175,47 @@ namespace ADO.NetEmployeeProblem
             }
 
         }
+        //this method is uesd to insert the values for the two tables buz here this will get failed
+        //buz here we  are trying to use TSQL. 
+        public void InsertIntoTwoTables(EmployeePayRoll model)
+        {
+            try
+            {
+                Connection = new SqlConnection(ConncetionString);
+                SqlCommand command = new SqlCommand("spInsertIntoTwoTables", Connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Name", model.Name);
+                command.Parameters.AddWithValue("@Gender", model.Gender);
+                command.Parameters.AddWithValue("@Address", model.Address);
+                command.Parameters.Add("@EmployeeID", SqlDbType.Int).Direction = ParameterDirection.Output;
+                this.Connection.Open();
+                var result = command.ExecuteScalar();
+                string EmployeeID = command.Parameters["@EmployeeID"].Value.ToString();
+                int newid = Convert.ToInt32(EmployeeID);
+
+                string query = $"insert into Salary (EmployeeID,OTSaraly) values({newid},{model.BasicPay})";
+                SqlCommand Comd = new SqlCommand(query, Connection);
+                int res = command.ExecuteNonQuery();
+                if (res != 0)
+                {
+                    Console.WriteLine("employee inserted suceesfully into table");
+                }
+                else
+                {
+                    Console.WriteLine("Not interested");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+
+            {
+                Connection.Close();
+            }
+
+        }
+
     }
 }
