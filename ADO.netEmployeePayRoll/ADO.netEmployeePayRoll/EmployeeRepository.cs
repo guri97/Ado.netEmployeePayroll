@@ -15,8 +15,6 @@ namespace ADO.NetEmployeeProblem
         SqlConnection Connection = null;
         //it represent connection to sql server database and
         //it cannot be inherited buz it is a sealed class
-
-        //uc1 and uc2 installing and rettiving data from the database table 
         public void GetAllEmployees()
 
         {
@@ -63,8 +61,6 @@ namespace ADO.NetEmployeeProblem
                 Console.WriteLine(ex.Message);
             }
         }
-
-        //UC2_Adding some data by connecting with the database
         public void AddEmployee(EmployeePayRoll model)
         {
             try
@@ -111,7 +107,7 @@ namespace ADO.NetEmployeeProblem
 
             }
         }
-        //uc3 and UC4  -Updateing the data with the salary using name
+
         public void UpdateEmployee(EmployeePayRoll model)
         {
             try
@@ -260,54 +256,6 @@ namespace ADO.NetEmployeeProblem
 
                 Console.WriteLine(ex.Message);
                 sqlTransaction.Rollback();
-            }
-        }
-        //UC_5 Ability to retrive all the employees who have joined the particular range from the date payroll service
-        public void RetrivetheEmployeeAccordingToDateRange(EmployeePayRoll model)
-        {
-            try
-            {
-                using (Connection = new SqlConnection(ConncetionString))
-                {
-
-                    EmployeePayRoll employee = new EmployeePayRoll();
-                    String Query = "SELECT * FROM  EmployeeTable where StartDate between CAST('2017-04-01' as date) and GETDATE();";
-                    //sqlcommand class provide multiple commad methods
-                    SqlCommand command = new SqlCommand(Query, Connection);
-                    Connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    //sqlreader provides a way to readind a stream from sql server it is also not inherited
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {//here if teh data is null we are replacing with the defult values
-                         //or it will read the dta from tha specified row
-                            employee.EmployeeID = Convert.ToInt32(reader["EmployeeID"] == DBNull.Value ? default : reader["EmployeeID"]);
-                            employee.Name = reader["Name"] == DBNull.Value ? default : reader["Name"].ToString();
-                            employee.Gender = reader["Gender"] == DBNull.Value ? default : reader["Gender"].ToString();
-                            employee.Department = reader["Department"] == DBNull.Value ? default : reader["Department"].ToString();
-                            employee.Address = reader["Address"] == DBNull.Value ? default : reader["Address"].ToString();
-                            employee.StartDate = reader["StartDate"] == DBNull.Value ? default : reader["StartDate"].ToString();
-                            employee.Phone = Convert.ToInt32(reader["Phone"] == DBNull.Value ? default : reader["Phone"]);
-                            employee.BasicPay = Convert.ToInt32(reader["BasicPay"] == DBNull.Value ? default : reader["BasicPay"]);
-                            employee.TaxablePay = Convert.ToInt32(reader["TaxablePay"] == DBNull.Value ? default : reader["TaxablePay"]);
-                            employee.NetPay = Convert.ToInt32(reader["NetPay"] == DBNull.Value ? default : reader["NetPay"]);
-                            employee.IncomTax = Convert.ToInt32(reader["IncomTax"] == DBNull.Value ? default : reader["IncomTax"]);
-                            employee.Deductions = Convert.ToInt32(reader["Deductions"] == DBNull.Value ? default : reader["Deductions"]);
-                            Console.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", employee.Name,
-                                employee.EmployeeID, employee.Department,
-                                employee.Address, employee.Phone, employee.Gender, employee.BasicPay,
-                                employee.Gender, employee.StartDate,
-                                employee.TaxablePay, employee.NetPay, employee.IncomTax, employee.Deductions);
-                        }
-                    }
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
             }
         }
 
