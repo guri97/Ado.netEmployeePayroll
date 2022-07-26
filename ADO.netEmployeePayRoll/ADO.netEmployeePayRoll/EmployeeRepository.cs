@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//here i am using EmployeePayRollproblem DB
 namespace ADO.NetEmployeeProblem
 {//all the bussiness logic are write here
     public class EmployeeRepository
@@ -16,6 +16,7 @@ namespace ADO.NetEmployeeProblem
         //it represent connection to sql server database and
         //it cannot be inherited buz it is a sealed class
         public void GetAllEmployees()
+
         {
             try
             {//here using is bolck and it is a keyword used to
@@ -58,6 +59,52 @@ namespace ADO.NetEmployeeProblem
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+        }
+        public void AddEmployee(EmployeePayRoll model)
+        {
+            try
+            {
+                Connection = new SqlConnection(ConncetionString);
+                SqlCommand command = new SqlCommand("dbo.spAddEmployee", Connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                //command.Parameters.AddWithValue("@EmployeeName", model.EmployeeID);
+                command.Parameters.AddWithValue("@Name", model.Name);
+                command.Parameters.AddWithValue("@Department", model.Department);
+                command.Parameters.AddWithValue("@Address", model.Address);
+                command.Parameters.AddWithValue("@Phone", model.Phone);
+                command.Parameters.AddWithValue("@BasicPay", model.BasicPay);
+                command.Parameters.AddWithValue("@StartDate", model.StartDate);
+                command.Parameters.AddWithValue("@Gender", model.Gender);
+                command.Parameters.AddWithValue("@TaxablePay", model.TaxablePay);
+                command.Parameters.AddWithValue("@NetPay", model.NetPay);
+                command.Parameters.AddWithValue("@IncomeTax", model.IncomTax);
+                command.Parameters.AddWithValue("@Deductions", model.Deductions);
+
+
+
+                this.Connection.Open();
+                var result = command.ExecuteNonQuery();
+                this.Connection.Close();
+                if (result != 0)
+                {
+                    Console.WriteLine("employee inserted suceesfully into table");
+                }
+                else
+                {
+                    Console.WriteLine("Not interested");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Connection.Close();
+
             }
         }
     }
