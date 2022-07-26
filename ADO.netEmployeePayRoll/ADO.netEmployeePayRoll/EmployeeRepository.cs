@@ -142,5 +142,38 @@ namespace ADO.NetEmployeeProblem
             }
 
         }
+        public void DeleteEmployee(EmployeePayRoll model)
+        {
+            try
+            {
+
+                Connection = new SqlConnection(ConncetionString);
+                SqlCommand command = new SqlCommand("dbo.spDeleteEmployee", Connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Name", model.Name);
+                this.Connection.Open();
+                var result = command.ExecuteNonQuery();
+                this.Connection.Close();
+                if (result != 0)
+                {
+                    Console.WriteLine("employee deleted suceesfully into table");
+                }
+                else
+                {
+                    Console.WriteLine("Not interested");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Connection.Close();
+
+            }
+
+        }
     }
 }
