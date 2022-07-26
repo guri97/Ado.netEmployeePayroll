@@ -17,6 +17,26 @@ namespace ADO.NetEmployeeProblem
         //it cannot be inherited buz it is a sealed class
 
         //uc1 and uc2 installing and rettiving data from the database table 
+
+
+        public bool EstablishConnection()
+        {
+            try
+            {
+                using (Connection = new SqlConnection(ConncetionString))
+                {
+                    Connection.Open();
+                    Console.WriteLine("Database_Connected_Successfully....");
+                    Connection.Close();
+                    return true;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Database_NOT_Connected!!!");
+                return false;
+            }
+        }
         public void GetAllEmployees()
 
         {
@@ -65,7 +85,7 @@ namespace ADO.NetEmployeeProblem
         }
 
         //UC2_Adding some data by connecting with the database
-        public void AddEmployee(EmployeePayRoll model)
+        public bool AddEmployee(EmployeePayRoll model)
         {
             try
             {
@@ -94,16 +114,20 @@ namespace ADO.NetEmployeeProblem
                 if (result != 0)
                 {
                     Console.WriteLine("employee inserted suceesfully into table");
+                    return true;
                 }
                 else
                 {
                     Console.WriteLine("Not interested");
+                    return false;
                 }
+
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return false;
             }
             finally
             {
@@ -112,7 +136,7 @@ namespace ADO.NetEmployeeProblem
             }
         }
         //uc3 and UC4  -Updateing the data with the salary using name
-        public void UpdateEmployee(EmployeePayRoll model)
+        public bool UpdateEmployee(EmployeePayRoll model)
         {
             try
             {
@@ -128,16 +152,19 @@ namespace ADO.NetEmployeeProblem
                 if (result != 0)
                 {
                     Console.WriteLine("employee updates suceesfully into table");
+                    return true;
                 }
                 else
                 {
                     Console.WriteLine("Not interested");
+                    return false;
                 }
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return false;
             }
             finally
             {
@@ -146,7 +173,7 @@ namespace ADO.NetEmployeeProblem
             }
 
         }
-        public void DeleteEmployee(EmployeePayRoll model)
+        public bool DeleteEmployee(EmployeePayRoll model)
         {
             try
             {
@@ -161,16 +188,19 @@ namespace ADO.NetEmployeeProblem
                 if (result != 0)
                 {
                     Console.WriteLine("employee deleted suceesfully into table");
+                    return true;
                 }
                 else
                 {
                     Console.WriteLine("Not interested");
+                    return false;
                 }
             }
 
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return false;
             }
             finally
             {
